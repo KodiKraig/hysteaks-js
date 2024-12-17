@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "build:ethers-sdk": "npm run compile --workspace=@hysteaks-js/contracts && npm run typechain --workspace=@hysteaks-js/ethers-sdk && npm run build --workspace=@hysteaks-js/ethers-sdk",
+    "cli": "npm run start --workspace=@hysteaks-js/cli",
     "test:contracts": "npm run test --workspace=@hysteaks-js/contracts",
     "test:contracts:coverage": "npm run test:coverage --workspace=@hysteaks-js/contracts"
   },
