@@ -1,13 +1,14 @@
 node_modules
 .env
+dist
 
 # Hardhat files
 cache
 artifacts
 
 # TypeChain files
-typechain
-typechain-types
+**/contracts/typechain
+**/contracts/typechain-types
 
 # solidity-coverage files
 coverage

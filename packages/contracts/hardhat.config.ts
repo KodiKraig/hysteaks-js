@@ -1,8 +1,8 @@
 import 'dotenv/config';
 
-import { HardhatUserConfig } from "hardhat/config";
-import "@nomicfoundation/hardhat-toolbox";
-import "hardhat-contract-sizer";
+import { HardhatUserConfig } from 'hardhat/config';
+import '@nomicfoundation/hardhat-toolbox';
+import 'hardhat-contract-sizer';
 
 const config: HardhatUserConfig = {
   solidity: '0.8.20',
