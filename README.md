@@ -4,6 +4,6 @@ An npm workspace contains all the public JavaScript related code for [HYSTEAKS](
 
 ## Packages
 
-- _/contracts_: All the Ethereum EVM Solidity contracts deployed on HYCHAIN.
-- _/cli_: HYSTEAKS CLI tool for interacting with deployed contracts. (coming soon!)
-- _/client-sdk_: JS wrapper SDK for interacting with deployed contracts with additional useful functions for calculating reward distributions and filtering events. (coming soon!)
+- __/contracts__: All the Ethereum EVM Solidity contracts deployed on HYCHAIN.
+- __/cli__: HYSTEAKS CLI tool for interacting with deployed contracts. (coming soon!)
+- __/client-sdk__: JS wrapper SDK for interacting with deployed contracts with additional useful functions for calculating reward distributions and filtering events. (coming soon!)
