@@ -75,5 +75,63 @@ export const registerBatchSendCommand = (program: Command): Command => {
       await submitTx(() => batchSendContract.connect(owner).setFee(fee));
     });
 
+  batchSendCommand
+    .command('sendNativeBatch')
+    .description('Send a batch of native tokens to multiple addresses')
+    .argument('<key>', 'the private key for the signer')
+    .argument(
+      '<recipients>',
+      'comma separated list of addresses to send the token to',
+      (value) => value.split(','),
+    )
+    .argument(
+      '<amounts>',
+      'comma separated list of amounts of the token to send to each address in ETH',
+      (value) => value.split(',').map(ethers.parseEther),
+    )
+    .action(async (key, recipients: string[], amounts: bigint[]) => {
+      if (recipients.length === 0) {
+        console.error('ERROR: Recipients array cannot be empty');
+        return;
+      }
+
+      if (recipients.length !== amounts.length) {
+        console.error(
+          'ERROR: Recipients and amounts must have the same length',
+        );
+        return;
+      }
+
+      const owner = new ethers.Wallet(key, provider);
+
+      let totalAmount = amounts.reduce((a, b) => a + b, 0n);
+
+      const isFeeExempt = await batchSendContract.isFeeExempt(owner.address);
+
+      if (!isFeeExempt) {
+        const fee = await batchSendContract.calculateFee(totalAmount);
+        console.log(`Fee: ${fee}`);
+        totalAmount += fee;
+      }
+
+      await submitTx(() =>
+        batchSendContract.connect(owner).sendNativeBatch(recipients, amounts, {
+          value: totalAmount,
+        }),
+      );
+    });
+
+  batchSendCommand
+    .command('withdrawNativeFees')
+    .description('Withdraw the native fees collected by the contract')
+    .argument('<key>', 'the private key for the signer')
+    .argument('<to>', 'the address to withdraw the fees to')
+    .action(async (key, to) => {
+      const owner = new ethers.Wallet(key, provider);
+      await submitTx(() =>
+        batchSendContract.connect(owner).withdrawNativeFees(to),
+      );
+    });
+
   return program;
 };
