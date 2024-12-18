@@ -8,6 +8,26 @@ const batchSendContract = HysteaksBatchSend__factory.connect(
   provider,
 );
 
+const submitTx = async (
+  transaction: () => Promise<ethers.ContractTransactionResponse>,
+): Promise<ethers.ContractTransactionReceipt> => {
+  console.log('Submitting transaction...');
+
+  const tx = await transaction();
+
+  console.log(`Transaction sent:\n${tx.hash}`);
+
+  const receipt = await tx.wait();
+
+  if (receipt?.status === 1) {
+    console.log('Transaction confirmed!');
+  } else {
+    console.log('Transaction failed');
+  }
+
+  return receipt!;
+};
+
 export const registerBatchSendCommand = (program: Command): Command => {
   const batchSendCommand = program
     .command('batchSend')
@@ -32,34 +52,27 @@ export const registerBatchSendCommand = (program: Command): Command => {
 
   batchSendCommand
     .command('setFeeExempt')
-    .description('Set the fee exempt status for an address')
+    .description('Set the fee exemption status for an address')
     .argument('<key>', 'the private key for the signer')
-    .argument('<address>', 'wallet address to set fee exempt status for')
+    .argument('<address>', 'wallet address to set fee exemption status for')
     .argument('<isExempt>', 'true or false')
     .action(async (key, address, isExempt) => {
       const owner = new ethers.Wallet(key, provider);
 
-      console.log('Submitting transaction...');
+      await submitTx(() =>
+        batchSendContract.connect(owner).setFeeExempt(address, isExempt),
+      );
+    });
 
-      const tx = await batchSendContract
-        .connect(owner)
-        .setFeeExempt(address, isExempt);
+  batchSendCommand
+    .command('setFee')
+    .description('Set the fee for batch sends for non exempt addresses')
+    .argument('<key>', 'the private key for the signer')
+    .argument('<fee>', 'the fee to set')
+    .action(async (key, fee) => {
+      const owner = new ethers.Wallet(key, provider);
 
-      console.log(`Transaction sent:\n${tx.hash}`);
-
-      const receipt = await tx.wait();
-
-      console.log('Transaction status', receipt?.status);
-
-      if (receipt?.status === 1) {
-        console.log(
-          'Transaction confirmed!\n',
-          `Exception status:\n`,
-          isExempt,
-        );
-      } else {
-        console.log('Transaction failed');
-      }
+      await submitTx(() => batchSendContract.connect(owner).setFee(fee));
     });
 
   return program;
