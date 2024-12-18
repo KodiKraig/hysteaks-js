@@ -142,6 +142,22 @@ describe('BatchSend', () => {
       ).to.equal(0);
     });
 
+    it('should emit a NativeBatchSent event', async () => {
+      const { batchSend, owner, otherAccount, nextAccount } =
+        await loadFixture(deployBatchSend);
+
+      await batchSend.connect(owner).setFeeExempt(owner.address, true);
+
+      const recipients = [otherAccount.address, nextAccount.address];
+      const amounts = [parseEther('0.1'), parseEther('0.2')];
+
+      await expect(
+        batchSend.connect(owner).sendNativeBatch(recipients, amounts, {
+          value: amounts[0] + amounts[1],
+        }),
+      ).to.emit(batchSend, 'NativeBatchSent');
+    });
+
     it('should revert if the fee is not paid', async () => {
       const { batchSend, owner, otherAccount, nextAccount } =
         await loadFixture(deployBatchSend);
@@ -282,6 +298,28 @@ describe('BatchSend', () => {
       expect(await steakToken.balanceOf(batchSend.getAddress())).to.equal(0);
     });
 
+    it('should emit a ERC20BatchSent event', async () => {
+      const { batchSend, owner, otherAccount, nextAccount, steakToken } =
+        await loadFixture(deployBatchSend);
+
+      await batchSend.connect(owner).setFeeExempt(owner.address, true);
+
+      await steakToken.connect(owner).mint(owner, parseEther('100'));
+
+      await steakToken
+        .connect(owner)
+        .approve(batchSend.getAddress(), parseEther('1000'));
+
+      const recipients = [otherAccount.address, nextAccount.address];
+      const amounts = [parseEther('0.1'), parseEther('0.2')];
+
+      await expect(
+        batchSend
+          .connect(owner)
+          .sendERC20Batch(steakToken.getAddress(), recipients, amounts),
+      ).to.emit(batchSend, 'ERC20BatchSent');
+    });
+
     it('should revert if the fee is not paid', async () => {
       const { batchSend, owner, otherAccount, nextAccount, steakToken } =
         await loadFixture(deployBatchSend);
@@ -406,6 +444,14 @@ describe('BatchSend', () => {
         )
         .withArgs(otherAccount.address, await batchSend.FEE_EXEMPT_ROLE());
     });
+
+    it('should emit a FeeExemptSet event', async () => {
+      const { batchSend, owner } = await loadFixture(deployBatchSend);
+
+      await expect(batchSend.connect(owner).setFeeExempt(owner.address, true))
+        .to.emit(batchSend, 'FeeExemptSet')
+        .withArgs(owner.address, true);
+    });
   });
 
   describe('Batch Set Fee Exempt', () => {
@@ -448,6 +494,18 @@ describe('BatchSend', () => {
         )
         .withArgs(otherAccount.address, await batchSend.FEE_EXEMPT_ROLE());
     });
+
+    it('should emit a BatchFeeExemptSet event', async () => {
+      const { batchSend, owner, otherAccount } =
+        await loadFixture(deployBatchSend);
+
+      const addresses = [owner.address, otherAccount.address];
+      const isExempt = [true, true];
+
+      await expect(
+        batchSend.connect(owner).batchSetFeeExempt(addresses, isExempt),
+      ).to.emit(batchSend, 'BatchFeeExemptSet');
+    });
   });
 
   // Admin Fee Management
@@ -472,6 +530,14 @@ describe('BatchSend', () => {
           'AccessControlUnauthorizedAccount',
         )
         .withArgs(otherAccount.address, await batchSend.DEFAULT_ADMIN_ROLE());
+    });
+
+    it('should emit a FeeSet event', async () => {
+      const { batchSend, owner } = await loadFixture(deployBatchSend);
+
+      await expect(batchSend.connect(owner).setFee(12345))
+        .to.emit(batchSend, 'FeeSet')
+        .withArgs(12345);
     });
   });
 
@@ -499,7 +565,11 @@ describe('BatchSend', () => {
         await hre.ethers.provider.getBalance(batchSend.getAddress()),
       ).to.equal(fee);
 
-      await batchSend.connect(owner).withdrawNativeFees(otherAccount.address);
+      await expect(
+        batchSend.connect(owner).withdrawNativeFees(otherAccount.address),
+      )
+        .to.emit(batchSend, 'NativeFeesWithdrawn')
+        .withArgs(otherAccount.address, fee);
 
       expect(
         await hre.ethers.provider.getBalance(otherAccount.address),
@@ -537,9 +607,13 @@ describe('BatchSend', () => {
 
       expect(await steakToken.balanceOf(otherAccount.address)).to.equal(0);
 
-      await batchSend
-        .connect(owner)
-        .withdrawERC20Fees(steakToken.getAddress(), otherAccount.address);
+      await expect(
+        batchSend
+          .connect(owner)
+          .withdrawERC20Fees(steakToken.getAddress(), otherAccount.address),
+      )
+        .to.emit(batchSend, 'ERC20FeesWithdrawn')
+        .withArgs(steakToken.getAddress(), otherAccount.address, fee);
 
       expect(await steakToken.balanceOf(otherAccount.address)).to.equal(fee);
 
