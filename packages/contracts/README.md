@@ -4,4 +4,6 @@ All contracts are deployed on the HYCHAIN network for the HYSTEAKS project.
 
 ## Deployed Contracts
 
-- BatchSend: 0x0000000000000000000000000000000000000000 (coming soon!)
+__BatchSend__
+- HYCHAIN Mainnet: 0x0000000000000000000000000000000000000000
+- HYCHAIN Testnet: 0x0000000000000000000000000000000000000000
