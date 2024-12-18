@@ -120,7 +120,7 @@ contract HysteaksBatchSend is AccessControl, IHysteaksBatchSend {
         emit FeeExemptSet(recipient, _isExempt);
     }
 
-    function batchSetFeeExempt(
+    function setFeeExemptBatch(
         address[] memory recipients,
         bool[] memory _isExempt
     ) external onlyRole(FEE_EXEMPT_ROLE) {

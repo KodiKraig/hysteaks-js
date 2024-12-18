@@ -78,7 +78,7 @@ interface IHysteaksBatchSend {
      * @param recipients The addresses to set the fee exempt status for
      * @param _isExempt Whether the addresses are exempt from fees
      */
-    function batchSetFeeExempt(
+    function setFeeExemptBatch(
         address[] memory recipients,
         bool[] memory _isExempt
     ) external;

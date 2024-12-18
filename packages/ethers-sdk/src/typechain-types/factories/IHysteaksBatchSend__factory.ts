@@ -151,24 +151,6 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "address[]",
-        name: "recipients",
-        type: "address[]",
-      },
-      {
-        internalType: "bool[]",
-        name: "_isExempt",
-        type: "bool[]",
-      },
-    ],
-    name: "batchSetFeeExempt",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         internalType: "uint256",
         name: "amount",
         type: "uint256",
@@ -266,6 +248,24 @@ const _abi = [
       },
     ],
     name: "setFeeExempt",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address[]",
+        name: "recipients",
+        type: "address[]",
+      },
+      {
+        internalType: "bool[]",
+        name: "_isExempt",
+        type: "bool[]",
+      },
+    ],
+    name: "setFeeExemptBatch",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

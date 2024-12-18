@@ -28,7 +28,6 @@ export interface HysteaksBatchSendInterface extends Interface {
     nameOrSignature:
       | "DEFAULT_ADMIN_ROLE"
       | "FEE_EXEMPT_ROLE"
-      | "batchSetFeeExempt"
       | "calculateFee"
       | "fee"
       | "getRoleAdmin"
@@ -41,6 +40,7 @@ export interface HysteaksBatchSendInterface extends Interface {
       | "sendNativeBatch"
       | "setFee"
       | "setFeeExempt"
+      | "setFeeExemptBatch"
       | "supportsInterface"
       | "withdrawERC20Fees"
       | "withdrawNativeFees"
@@ -67,10 +67,6 @@ export interface HysteaksBatchSendInterface extends Interface {
   encodeFunctionData(
     functionFragment: "FEE_EXEMPT_ROLE",
     values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "batchSetFeeExempt",
-    values: [AddressLike[], boolean[]]
   ): string;
   encodeFunctionData(
     functionFragment: "calculateFee",
@@ -118,6 +114,10 @@ export interface HysteaksBatchSendInterface extends Interface {
     values: [AddressLike, boolean]
   ): string;
   encodeFunctionData(
+    functionFragment: "setFeeExemptBatch",
+    values: [AddressLike[], boolean[]]
+  ): string;
+  encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [BytesLike]
   ): string;
@@ -136,10 +136,6 @@ export interface HysteaksBatchSendInterface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "FEE_EXEMPT_ROLE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "batchSetFeeExempt",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -173,6 +169,10 @@ export interface HysteaksBatchSendInterface extends Interface {
   decodeFunctionResult(functionFragment: "setFee", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setFeeExempt",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setFeeExemptBatch",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -398,12 +398,6 @@ export interface HysteaksBatchSend extends BaseContract {
 
   FEE_EXEMPT_ROLE: TypedContractMethod<[], [string], "view">;
 
-  batchSetFeeExempt: TypedContractMethod<
-    [recipients: AddressLike[], _isExempt: boolean[]],
-    [void],
-    "nonpayable"
-  >;
-
   calculateFee: TypedContractMethod<[amount: BigNumberish], [bigint], "view">;
 
   fee: TypedContractMethod<[], [bigint], "view">;
@@ -456,6 +450,12 @@ export interface HysteaksBatchSend extends BaseContract {
     "nonpayable"
   >;
 
+  setFeeExemptBatch: TypedContractMethod<
+    [recipients: AddressLike[], _isExempt: boolean[]],
+    [void],
+    "nonpayable"
+  >;
+
   supportsInterface: TypedContractMethod<
     [interfaceId: BytesLike],
     [boolean],
@@ -484,13 +484,6 @@ export interface HysteaksBatchSend extends BaseContract {
   getFunction(
     nameOrSignature: "FEE_EXEMPT_ROLE"
   ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "batchSetFeeExempt"
-  ): TypedContractMethod<
-    [recipients: AddressLike[], _isExempt: boolean[]],
-    [void],
-    "nonpayable"
-  >;
   getFunction(
     nameOrSignature: "calculateFee"
   ): TypedContractMethod<[amount: BigNumberish], [bigint], "view">;
@@ -552,6 +545,13 @@ export interface HysteaksBatchSend extends BaseContract {
     nameOrSignature: "setFeeExempt"
   ): TypedContractMethod<
     [recipient: AddressLike, _isExempt: boolean],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "setFeeExemptBatch"
+  ): TypedContractMethod<
+    [recipients: AddressLike[], _isExempt: boolean[]],
     [void],
     "nonpayable"
   >;

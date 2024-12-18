@@ -466,7 +466,7 @@ describe('BatchSend', () => {
       ];
       const isExempt = [true, false, true];
 
-      await batchSend.connect(owner).batchSetFeeExempt(addresses, isExempt);
+      await batchSend.connect(owner).setFeeExemptBatch(addresses, isExempt);
 
       for (let i = 0; i < addresses.length; i++) {
         expect(await batchSend.isFeeExempt(addresses[i])).to.equal(isExempt[i]);
@@ -478,7 +478,7 @@ describe('BatchSend', () => {
       await expect(
         batchSend
           .connect(owner)
-          .batchSetFeeExempt([owner.address], [true, false]),
+          .setFeeExemptBatch([owner.address], [true, false]),
       ).to.be.revertedWith(
         'Addresses and exemptions must have the same length',
       );
@@ -487,7 +487,7 @@ describe('BatchSend', () => {
     it('should revert if the fee exempt role is not the caller', async () => {
       const { batchSend, otherAccount } = await loadFixture(deployBatchSend);
 
-      await expect(batchSend.connect(otherAccount).batchSetFeeExempt([], []))
+      await expect(batchSend.connect(otherAccount).setFeeExemptBatch([], []))
         .to.be.revertedWithCustomError(
           batchSend,
           'AccessControlUnauthorizedAccount',
@@ -503,7 +503,7 @@ describe('BatchSend', () => {
       const isExempt = [true, true];
 
       await expect(
-        batchSend.connect(owner).batchSetFeeExempt(addresses, isExempt),
+        batchSend.connect(owner).setFeeExemptBatch(addresses, isExempt),
       ).to.emit(batchSend, 'BatchFeeExemptSet');
     });
   });

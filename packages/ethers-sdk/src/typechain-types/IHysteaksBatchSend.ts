@@ -26,13 +26,13 @@ import type {
 export interface IHysteaksBatchSendInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "batchSetFeeExempt"
       | "calculateFee"
       | "fee"
       | "sendERC20Batch"
       | "sendNativeBatch"
       | "setFee"
       | "setFeeExempt"
+      | "setFeeExemptBatch"
       | "withdrawERC20Fees"
       | "withdrawNativeFees"
   ): FunctionFragment;
@@ -48,10 +48,6 @@ export interface IHysteaksBatchSendInterface extends Interface {
       | "NativeFeesWithdrawn"
   ): EventFragment;
 
-  encodeFunctionData(
-    functionFragment: "batchSetFeeExempt",
-    values: [AddressLike[], boolean[]]
-  ): string;
   encodeFunctionData(
     functionFragment: "calculateFee",
     values: [BigNumberish]
@@ -74,6 +70,10 @@ export interface IHysteaksBatchSendInterface extends Interface {
     values: [AddressLike, boolean]
   ): string;
   encodeFunctionData(
+    functionFragment: "setFeeExemptBatch",
+    values: [AddressLike[], boolean[]]
+  ): string;
+  encodeFunctionData(
     functionFragment: "withdrawERC20Fees",
     values: [AddressLike, AddressLike]
   ): string;
@@ -82,10 +82,6 @@ export interface IHysteaksBatchSendInterface extends Interface {
     values: [AddressLike]
   ): string;
 
-  decodeFunctionResult(
-    functionFragment: "batchSetFeeExempt",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "calculateFee",
     data: BytesLike
@@ -102,6 +98,10 @@ export interface IHysteaksBatchSendInterface extends Interface {
   decodeFunctionResult(functionFragment: "setFee", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setFeeExempt",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setFeeExemptBatch",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -261,12 +261,6 @@ export interface IHysteaksBatchSend extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
-  batchSetFeeExempt: TypedContractMethod<
-    [recipients: AddressLike[], _isExempt: boolean[]],
-    [void],
-    "nonpayable"
-  >;
-
   calculateFee: TypedContractMethod<[amount: BigNumberish], [bigint], "view">;
 
   fee: TypedContractMethod<[], [bigint], "view">;
@@ -291,6 +285,12 @@ export interface IHysteaksBatchSend extends BaseContract {
     "nonpayable"
   >;
 
+  setFeeExemptBatch: TypedContractMethod<
+    [recipients: AddressLike[], _isExempt: boolean[]],
+    [void],
+    "nonpayable"
+  >;
+
   withdrawERC20Fees: TypedContractMethod<
     [token: AddressLike, to: AddressLike],
     [void],
@@ -307,13 +307,6 @@ export interface IHysteaksBatchSend extends BaseContract {
     key: string | FunctionFragment
   ): T;
 
-  getFunction(
-    nameOrSignature: "batchSetFeeExempt"
-  ): TypedContractMethod<
-    [recipients: AddressLike[], _isExempt: boolean[]],
-    [void],
-    "nonpayable"
-  >;
   getFunction(
     nameOrSignature: "calculateFee"
   ): TypedContractMethod<[amount: BigNumberish], [bigint], "view">;
@@ -341,6 +334,13 @@ export interface IHysteaksBatchSend extends BaseContract {
     nameOrSignature: "setFeeExempt"
   ): TypedContractMethod<
     [recipient: AddressLike, _isExempt: boolean],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "setFeeExemptBatch"
+  ): TypedContractMethod<
+    [recipients: AddressLike[], _isExempt: boolean[]],
     [void],
     "nonpayable"
   >;
