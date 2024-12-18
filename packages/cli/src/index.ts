@@ -1,7 +1,8 @@
 import 'dotenv/config';
 import { Command } from 'commander';
 import { registerBalanceCommand } from './commands/balance';
-import { registerBatchSendCommand } from './commands/batchSend';
+import { registerBatchSendCommand } from './commands/batch-send';
+import { registerSteakTokenCommand } from './commands/steak-token';
 
 const program = new Command();
 
@@ -12,5 +13,7 @@ program
 registerBalanceCommand(program);
 
 registerBatchSendCommand(program);
+
+registerSteakTokenCommand(program);
 
 program.parse();
