@@ -1,6 +1,6 @@
-# HYSTEAKS JavaScript & Ethereum Contracts
+# HYSTEAKS Ethereum Contracts
 
-An npm workspace containing all the public JavaScript related code for [HYSTEAKS](https://www.hysteaks.com).
+An npm workspace containing the Solidity contracts for [HYSTEAKS](https://www.hysteaks.com) along with some additional tools for interacting with them.
 
 ## Packages
 
