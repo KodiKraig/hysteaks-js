@@ -1,6 +1,10 @@
-# HYSTEAKS Ethereum Contracts
+# HYSTEAKS JS
 
 An npm workspace containing the Solidity contracts for [HYSTEAKS](https://www.hysteaks.com) along with some additional tools for interacting with them.
+
+<p align="center">
+  <img src="https://www.hysteaks.com/assets/OpenGraph.png" alt="HYSTEAKS">
+</p>
 
 ## Packages
 
