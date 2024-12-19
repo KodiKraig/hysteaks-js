@@ -7,6 +7,9 @@ describe('even', () => {
     const recipientCount = 5;
     const result = even(amount, recipientCount);
     expect(result).to.deep.equal([20n, 20n, 20n, 20n, 20n]);
+
+    const distributedAmount = result.reduce((acc, amount) => acc + amount, 0n);
+    expect(distributedAmount).to.equal(amount);
   });
 
   it('should distribute the amount evenly among the recipients with a remainder', () => {
@@ -14,6 +17,9 @@ describe('even', () => {
     const recipientCount = 5;
     const result = even(amount, recipientCount);
     expect(result).to.deep.equal([20n, 20n, 20n, 20n, 20n]);
+
+    const distributedAmount = result.reduce((acc, amount) => acc + amount, 0n);
+    expect(distributedAmount).to.equal(100n);
   });
 
   it('should distribute with large number', () => {
@@ -27,5 +33,8 @@ describe('even', () => {
       2469020000247n,
       2469020000247n,
     ]);
+
+    const distributedAmount = result.reduce((acc, amount) => acc + amount, 0n);
+    expect(distributedAmount).to.equal(BigInt(amount));
   });
 });
