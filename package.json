@@ -2,12 +2,13 @@
   "name": "hysteaks-js",
   "private": true,
   "scripts": {
-    "build:ethers-sdk": "npm run compile --workspace=@hysteaks-js/contracts && npm run typechain --workspace=@hysteaks-js/ethers-sdk && npm run build --workspace=@hysteaks-js/ethers-sdk",
-    "cli": "npm run start --workspace=@hysteaks-js/cli",
-    "test": "npm run test --workspace=@hysteaks-js/reward-helpers && npm run test --workspace=@hysteaks-js/contracts",
-    "test:reward-helpers": "npm run test --workspace=@hysteaks-js/reward-helpers",
-    "test:contracts": "npm run test --workspace=@hysteaks-js/contracts",
-    "test:contracts:coverage": "npm run test:coverage --workspace=@hysteaks-js/contracts"
+    "build:ethers-sdk": "npm run compile -w @hysteaks-js/contracts && npm run typechain -w @hysteaks-js/ethers-sdk && npm run build -w @hysteaks-js/ethers-sdk",
+    "build:reward-helpers": "npm run build -w @hysteaks-js/reward-helpers",
+    "cli": "npm run start -w @hysteaks-js/cli",
+    "test": "npm run test -w @hysteaks-js/reward-helpers && npm run test -w @hysteaks-js/contracts",
+    "test:reward-helpers": "npm run test -w @hysteaks-js/reward-helpers",
+    "test:contracts": "npm run test -w @hysteaks-js/contracts",
+    "test:contracts:coverage": "npm run test:coverage -w @hysteaks-js/contracts"
   },
   "workspaces": [
     "packages/*"
