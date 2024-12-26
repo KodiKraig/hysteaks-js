@@ -22,7 +22,7 @@ interface IHysteaksBatchSend {
      * @param recipients The addresses of the recipients
      * @param amounts The amounts of native tokens sent to each recipient
      */
-    event NativeBatchSent(address[] indexed recipients, uint256[] amounts);
+    event NativeBatchSent(address[] recipients, uint256[] amounts);
 
     /**
      * @notice Send ERC20 tokens to multiple recipients
@@ -44,7 +44,7 @@ interface IHysteaksBatchSend {
      */
     event ERC20BatchSent(
         address indexed token,
-        address[] indexed recipients,
+        address[] recipients,
         uint256[] amounts
     );
 
@@ -88,7 +88,7 @@ interface IHysteaksBatchSend {
      * @param recipients The addresses that the fee exempt status is set for
      * @param isExempt Whether the addresses are exempt from fees
      */
-    event BatchFeeExemptSet(address[] indexed recipients, bool[] isExempt);
+    event BatchFeeExemptSet(address[] recipients, bool[] isExempt);
 
     /**
      * Admin Fee Management

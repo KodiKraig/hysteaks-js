@@ -13,7 +13,7 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
-        indexed: true,
+        indexed: false,
         internalType: "address[]",
         name: "recipients",
         type: "address[]",
@@ -38,7 +38,7 @@ const _abi = [
         type: "address",
       },
       {
-        indexed: true,
+        indexed: false,
         internalType: "address[]",
         name: "recipients",
         type: "address[]",
@@ -114,7 +114,7 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
-        indexed: true,
+        indexed: false,
         internalType: "address[]",
         name: "recipients",
         type: "address[]",
