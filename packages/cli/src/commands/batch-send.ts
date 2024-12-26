@@ -98,7 +98,7 @@ const registerFeeCommands = (program: Command): Command => {
 
 const registerSendCommands = (program: Command): Command => {
   const sendCommand = program
-    .command('sendBatch')
+    .command('send')
     .description('Batch send tokens related commands');
 
   sendCommand
@@ -207,13 +207,14 @@ const registerEventCommands = (program: Command): Command => {
   eventCommand
     .command('nativeBatchSent')
     .description('Send events for native token batch sends')
-    .argument('<address>', 'the address to send the events from')
-    .action(async (address) => {
-      const filter = batchSendContract.filters.NativeBatchSent([address]);
+    .action(async () => {
+      const event = batchSendContract.getEvent('NativeBatchSent');
 
-      const events = await batchSendContract.queryFilter(filter);
+      const events = await batchSendContract.queryFilter(event);
 
-      console.log(events);
+      for (const event of events) {
+        console.log(event);
+      }
     });
 
   return eventCommand;
