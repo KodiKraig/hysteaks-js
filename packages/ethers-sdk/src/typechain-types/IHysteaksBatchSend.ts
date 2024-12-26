@@ -129,16 +129,19 @@ export namespace BatchFeeExemptSetEvent {
 
 export namespace ERC20BatchSentEvent {
   export type InputTuple = [
+    sender: AddressLike,
     token: AddressLike,
     recipients: AddressLike[],
     amounts: BigNumberish[]
   ];
   export type OutputTuple = [
+    sender: string,
     token: string,
     recipients: string[],
     amounts: bigint[]
   ];
   export interface OutputObject {
+    sender: string;
     token: string;
     recipients: string[];
     amounts: bigint[];
@@ -193,9 +196,18 @@ export namespace FeeSetEvent {
 }
 
 export namespace NativeBatchSentEvent {
-  export type InputTuple = [recipients: AddressLike[], amounts: BigNumberish[]];
-  export type OutputTuple = [recipients: string[], amounts: bigint[]];
+  export type InputTuple = [
+    sender: AddressLike,
+    recipients: AddressLike[],
+    amounts: BigNumberish[]
+  ];
+  export type OutputTuple = [
+    sender: string,
+    recipients: string[],
+    amounts: bigint[]
+  ];
   export interface OutputObject {
+    sender: string;
     recipients: string[];
     amounts: bigint[];
   }
@@ -417,7 +429,7 @@ export interface IHysteaksBatchSend extends BaseContract {
       BatchFeeExemptSetEvent.OutputObject
     >;
 
-    "ERC20BatchSent(address,address[],uint256[])": TypedContractEvent<
+    "ERC20BatchSent(address,address,address[],uint256[])": TypedContractEvent<
       ERC20BatchSentEvent.InputTuple,
       ERC20BatchSentEvent.OutputTuple,
       ERC20BatchSentEvent.OutputObject
@@ -461,7 +473,7 @@ export interface IHysteaksBatchSend extends BaseContract {
       FeeSetEvent.OutputObject
     >;
 
-    "NativeBatchSent(address[],uint256[])": TypedContractEvent<
+    "NativeBatchSent(address,address[],uint256[])": TypedContractEvent<
       NativeBatchSentEvent.InputTuple,
       NativeBatchSentEvent.OutputTuple,
       NativeBatchSentEvent.OutputObject

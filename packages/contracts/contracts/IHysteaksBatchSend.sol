@@ -19,10 +19,15 @@ interface IHysteaksBatchSend {
 
     /**
      * @notice Event emitted when native tokens are sent to multiple recipients
+     * @param sender The address of the sender
      * @param recipients The addresses of the recipients
      * @param amounts The amounts of native tokens sent to each recipient
      */
-    event NativeBatchSent(address[] recipients, uint256[] amounts);
+    event NativeBatchSent(
+        address indexed sender,
+        address[] recipients,
+        uint256[] amounts
+    );
 
     /**
      * @notice Send ERC20 tokens to multiple recipients
@@ -38,11 +43,13 @@ interface IHysteaksBatchSend {
 
     /**
      * @notice Event emitted when ERC20 tokens are sent to multiple recipients
+     * @param sender The address of the sender
      * @param token The address of the ERC20 token
      * @param recipients The addresses of the recipients
      * @param amounts The amounts of ERC20 tokens sent to each recipient
      */
     event ERC20BatchSent(
+        address indexed sender,
         address indexed token,
         address[] recipients,
         uint256[] amounts

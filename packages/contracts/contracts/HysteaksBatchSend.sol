@@ -65,7 +65,7 @@ contract HysteaksBatchSend is AccessControl, IHysteaksBatchSend {
             require(success, "Transfer failed");
         }
 
-        emit NativeBatchSent(recipients, amounts);
+        emit NativeBatchSent(_msgSender(), recipients, amounts);
     }
 
     function sendERC20Batch(
@@ -100,7 +100,7 @@ contract HysteaksBatchSend is AccessControl, IHysteaksBatchSend {
             IERC20(token).transferFrom(_msgSender(), recipients[i], amounts[i]);
         }
 
-        emit ERC20BatchSent(token, recipients, amounts);
+        emit ERC20BatchSent(_msgSender(), token, recipients, amounts);
     }
 
     function calculateFee(uint256 amount) public view returns (uint256) {

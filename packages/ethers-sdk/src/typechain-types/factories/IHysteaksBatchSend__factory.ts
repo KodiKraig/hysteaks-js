@@ -34,6 +34,12 @@ const _abi = [
       {
         indexed: true,
         internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
         name: "token",
         type: "address",
       },
@@ -113,6 +119,12 @@ const _abi = [
   {
     anonymous: false,
     inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
       {
         indexed: false,
         internalType: "address[]",

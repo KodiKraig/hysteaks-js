@@ -1,8 +1,13 @@
-import { Command } from 'commander';
+import { Command, Option } from 'commander';
 import { HysteaksBatchSend__factory } from '@hysteaks-js/ethers-sdk';
 import { provider } from '../provider';
 import { ethers } from 'ethers';
 import submitTx from '../helpers/submit-tx';
+import {
+  TypedContractEvent,
+  TypedDeferredTopicFilter,
+  TypedEventLog,
+} from '@hysteaks-js/ethers-sdk/dist/typechain-types/common';
 
 const batchSendContract = HysteaksBatchSend__factory.connect(
   process.env.BATCH_SEND_CONTRACT_ADDRESS!,
@@ -24,7 +29,9 @@ export const registerBatchSendCommand = (program: Command): Command => {
 };
 
 const registerFeeCommands = (program: Command): Command => {
-  const feeCommand = program.command('fee').description('Fee related commands');
+  const feeCommand = program
+    .command('fee')
+    .description('Check fee exemption status and batch send fees');
 
   feeCommand
     .command('isFeeExempt')
@@ -99,7 +106,7 @@ const registerFeeCommands = (program: Command): Command => {
 const registerSendCommands = (program: Command): Command => {
   const sendCommand = program
     .command('send')
-    .description('Batch send tokens related commands');
+    .description('Perform batch send transaction to multiple addresses');
 
   sendCommand
     .command('native')
@@ -202,20 +209,85 @@ const registerSendCommands = (program: Command): Command => {
 const registerEventCommands = (program: Command): Command => {
   const eventCommand = program
     .command('events')
-    .description('Commands to filter events');
+    .description('Filter events from the batch send contract');
 
   eventCommand
     .command('nativeBatchSent')
-    .description('Send events for native token batch sends')
-    .action(async () => {
-      const event = batchSendContract.getEvent('NativeBatchSent');
+    .description('Filter events for native token batch sends')
+    .addOption(fromOption)
+    .addOption(toOption)
+    .action(async (opts) => {
+      await queryFilter(
+        batchSendContract.filters.NativeBatchSent(opts.address ?? undefined),
+        (event) => {
+          console.log(`Sender: ${event.args[0]}`);
+          console.log(`Recipients: ${event.args[1]}`);
+          console.log(
+            `Amounts: ${event.args[2].map((a) => ethers.formatEther(a))}`,
+          );
+        },
+        opts,
+      );
+    });
 
-      const events = await batchSendContract.queryFilter(event);
-
-      for (const event of events) {
-        console.log(event);
-      }
+  eventCommand
+    .command('erc20BatchSent')
+    .description('Filter events for ERC20 token batch sends')
+    .option('-a, --address <string>', 'the sender that submitted the batch')
+    .option('-t, --token <string>', 'the address of the ERC20 token sent')
+    .addOption(fromOption)
+    .addOption(toOption)
+    .action(async (opts) => {
+      await queryFilter(
+        batchSendContract.filters.ERC20BatchSent(
+          opts.address ?? undefined,
+          opts.token ?? undefined,
+        ),
+        (event) => {
+          console.log(`Sender: ${event.args[0]}`);
+          console.log(`Token: ${event.args[1]}`);
+          console.log(`Recipients: ${event.args[2]}`);
+          console.log(
+            `Amounts: ${event.args[3].map((a) => ethers.formatEther(a))}`,
+          );
+        },
+        opts,
+      );
     });
 
   return eventCommand;
 };
+
+const queryFilter = async <T extends TypedContractEvent<any, any, any>>(
+  filter: TypedDeferredTopicFilter<T>,
+  handler: (event: TypedEventLog<T>) => void,
+  opts: any,
+) => {
+  const events = await batchSendContract.queryFilter(
+    filter,
+    opts?.from ? Number(opts.from) : undefined,
+    opts?.to ? Number(opts.to) : undefined,
+  );
+
+  if (events.length === 0) {
+    console.log('No events found');
+    return;
+  }
+
+  for (const event of events) {
+    console.log(
+      `\n--------------------------------${event.eventName}--------------------------------`,
+    );
+    console.log('Block Number:', event.blockNumber);
+    handler(event);
+  }
+};
+
+const fromOption = new Option(
+  '--from <number>',
+  'the block number to start from. defaults to 0',
+);
+const toOption = new Option(
+  '--to <number>',
+  'the block number to end at. defaults to latest block.',
+);
