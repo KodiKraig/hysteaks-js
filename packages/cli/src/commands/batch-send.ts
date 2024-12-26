@@ -14,15 +14,19 @@ export const registerBatchSendCommand = (program: Command): Command => {
     .command('batchSend')
     .description('Batch send contract interactions');
 
-  batchSendCommand
-    .command('fee')
-    .description('Get the current batch send fee for non exempt addresses')
-    .action(async () => {
-      const fee = await batchSendContract.fee();
-      console.log(`Fee percentage:\n${Number(fee) / 10}%`);
-    });
+  registerFeeCommands(batchSendCommand);
 
-  batchSendCommand
+  registerSendCommands(batchSendCommand);
+
+  registerEventCommands(batchSendCommand);
+
+  return program;
+};
+
+const registerFeeCommands = (program: Command): Command => {
+  const feeCommand = program.command('fee').description('Fee related commands');
+
+  feeCommand
     .command('isFeeExempt')
     .description('Check if an address is fee exempt')
     .argument('<address>', 'wallet address')
@@ -31,7 +35,7 @@ export const registerBatchSendCommand = (program: Command): Command => {
       console.log(`Is fee exempt:\n${isFeeExempt}`);
     });
 
-  batchSendCommand
+  feeCommand
     .command('setFeeExempt')
     .description('Set the fee exemption status for an address')
     .argument('<key>', 'the private key for the signer')
@@ -45,7 +49,15 @@ export const registerBatchSendCommand = (program: Command): Command => {
       );
     });
 
-  batchSendCommand
+  feeCommand
+    .command('getFee')
+    .description('Get the current batch send fee for non exempt addresses')
+    .action(async () => {
+      const fee = await batchSendContract.fee();
+      console.log(`Fee percentage:\n${Number(fee) / 10}%`);
+    });
+
+  feeCommand
     .command('setFee')
     .description('Set the fee for batch sends for non exempt addresses')
     .argument('<key>', 'the private key for the signer')
@@ -56,8 +68,41 @@ export const registerBatchSendCommand = (program: Command): Command => {
       await submitTx(() => batchSendContract.connect(owner).setFee(fee));
     });
 
-  batchSendCommand
-    .command('sendNativeBatch')
+  feeCommand
+    .command('withdrawNativeFees')
+    .description('Withdraw the native fees collected by the contract')
+    .argument('<key>', 'the private key for the signer')
+    .argument('<to>', 'the address to withdraw the fees to')
+    .action(async (key, to) => {
+      const owner = new ethers.Wallet(key, provider);
+      await submitTx(() =>
+        batchSendContract.connect(owner).withdrawNativeFees(to),
+      );
+    });
+
+  feeCommand
+    .command('withdrawERC20Fees')
+    .description('Withdraw the ERC20 fees collected by the contract')
+    .argument('<key>', 'the private key for the signer')
+    .argument('<token>', 'the address of the ERC20 token to withdraw')
+    .argument('<to>', 'the address to withdraw the fees to')
+    .action(async (key, token, to) => {
+      const owner = new ethers.Wallet(key, provider);
+      await submitTx(() =>
+        batchSendContract.connect(owner).withdrawERC20Fees(token, to),
+      );
+    });
+
+  return feeCommand;
+};
+
+const registerSendCommands = (program: Command): Command => {
+  const sendCommand = program
+    .command('sendBatch')
+    .description('Batch send tokens related commands');
+
+  sendCommand
+    .command('native')
     .description('Send a batch of native tokens to multiple addresses')
     .argument('<key>', 'the private key for the signer')
     .argument(
@@ -102,20 +147,8 @@ export const registerBatchSendCommand = (program: Command): Command => {
       );
     });
 
-  batchSendCommand
-    .command('withdrawNativeFees')
-    .description('Withdraw the native fees collected by the contract')
-    .argument('<key>', 'the private key for the signer')
-    .argument('<to>', 'the address to withdraw the fees to')
-    .action(async (key, to) => {
-      const owner = new ethers.Wallet(key, provider);
-      await submitTx(() =>
-        batchSendContract.connect(owner).withdrawNativeFees(to),
-      );
-    });
-
-  batchSendCommand
-    .command('sendERC20Batch')
+  sendCommand
+    .command('erc20')
     .description('Send a batch of ERC20 tokens to multiple addresses')
     .argument('<key>', 'the private key for the signer')
     .argument('<token>', 'the address of the ERC20 token to send')
@@ -163,18 +196,25 @@ export const registerBatchSendCommand = (program: Command): Command => {
       },
     );
 
-  batchSendCommand
-    .command('withdrawERC20Fees')
-    .description('Withdraw the ERC20 fees collected by the contract')
-    .argument('<key>', 'the private key for the signer')
-    .argument('<token>', 'the address of the ERC20 token to withdraw')
-    .argument('<to>', 'the address to withdraw the fees to')
-    .action(async (key, token, to) => {
-      const owner = new ethers.Wallet(key, provider);
-      await submitTx(() =>
-        batchSendContract.connect(owner).withdrawERC20Fees(token, to),
-      );
+  return sendCommand;
+};
+
+const registerEventCommands = (program: Command): Command => {
+  const eventCommand = program
+    .command('events')
+    .description('Commands to filter events');
+
+  eventCommand
+    .command('nativeBatchSent')
+    .description('Send events for native token batch sends')
+    .argument('<address>', 'the address to send the events from')
+    .action(async (address) => {
+      const filter = batchSendContract.filters.NativeBatchSent([address]);
+
+      const events = await batchSendContract.queryFilter(filter);
+
+      console.log(events);
     });
 
-  return program;
+  return eventCommand;
 };
