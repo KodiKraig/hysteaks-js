@@ -31,11 +31,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Update version
-        run: |
-          npm version ${{ steps.package.outputs.version }} \
-            --workspace ${{ steps.package.outputs.package }} \
-            --no-git-tag-version
+      #   - name: Update version
+      #     run: |
+      #       npm version ${{ steps.package.outputs.version }} \
+      #         --workspace ${{ steps.package.outputs.package }} \
+      #         --no-git-tag-version
 
       - name: Build package
         run: npm run build --workspace ${{ steps.package.outputs.package }}
