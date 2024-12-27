@@ -30,6 +30,13 @@
   "homepage": "https://www.hysteaks.com",
   "sideEffects": false,
   "license": "MIT",
+  "private": false,
+  "keywords": [
+    "hysteaks",
+    "hychain",
+    "ethereum",
+    "topia"
+  ],
   "scripts": {
     "build": "tsc && tsc -p tsconfig.esm.json",
     "test": "mocha -r ts-node/register 'src/**/*.test.ts'"
