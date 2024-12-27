@@ -50,7 +50,7 @@ jobs:
 
       - name: Validate package exists
         run: |
-          if ! npm run list --workspace ${{ steps.package.outputs.package }} &> /dev/null; then
+          if ! npm list --workspace ${{ steps.package.outputs.package }} &> /dev/null; then
             echo "Package ${{ steps.package.outputs.package }} not found in workspace"
             exit 1
           fi
