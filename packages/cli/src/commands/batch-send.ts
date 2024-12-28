@@ -3,11 +3,11 @@ import { HysteaksBatchSend__factory } from '@hysteaks-js/ethers-sdk';
 import { provider } from '../provider';
 import { ethers } from 'ethers';
 import submitTx from '../helpers/submit-tx';
-import {
-  TypedContractEvent,
+import type {
   TypedDeferredTopicFilter,
   TypedEventLog,
-} from '@hysteaks-js/ethers-sdk/dist/typechain-types/common';
+  TypedContractEvent,
+} from '@hysteaks-js/ethers-sdk/common';
 
 const batchSendContract = HysteaksBatchSend__factory.connect(
   process.env.BATCH_SEND_CONTRACT_ADDRESS!,

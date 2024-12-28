@@ -3,7 +3,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "build:ethers-sdk": "npm run compile -w @hysteaks-js/contracts && npm run typechain -w @hysteaks-js/ethers-sdk && npm run build -w @hysteaks-js/ethers-sdk",
+    "build:ethers-sdk": "npm run build -w @hysteaks-js/ethers-sdk",
     "build:reward-helpers": "npm run build -w @hysteaks-js/reward-helpers",
     "cli": "npm run start -w @hysteaks-js/cli",
     "test": "npm run test -w @hysteaks-js/reward-helpers && npm run test -w @hysteaks-js/contracts",
