@@ -6,6 +6,19 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./IHysteaksBatchSend.sol";
 
+/*
+ ██░ ██▓██   ██▓  ██████ ▄▄▄█████▓▓█████ ▄▄▄       ██ ▄█▀  ██████ 
+▓██░ ██▒▒██  ██▒▒██    ▒ ▓  ██▒ ▓▒▓█   ▀▒████▄     ██▄█▒ ▒██    ▒ 
+▒██▀▀██░ ▒██ ██░░ ▓██▄   ▒ ▓██░ ▒░▒███  ▒██  ▀█▄  ▓███▄░ ░ ▓██▄   
+░▓█ ░██  ░ ▐██▓░  ▒   ██▒░ ▓██▓ ░ ▒▓█  ▄░██▄▄▄▄██ ▓██ █▄   ▒   ██▒
+░▓█▒░██▓ ░ ██▒▓░▒██████▒▒  ▒██▒ ░ ░▒████▒▓█   ▓██▒▒██▒ █▄▒██████▒▒
+ ▒ ░░▒░▒  ██▒▒▒ ▒ ▒▓▒ ▒ ░  ▒ ░░   ░░ ▒░ ░▒▒   ▓▒█░▒ ▒▒ ▓▒▒ ▒▓▒ ▒ ░
+ ▒ ░▒░ ░▓██ ░▒░ ░ ░▒  ░ ░    ░     ░ ░  ░ ▒   ▒▒ ░░ ░▒ ▒░░ ░▒  ░ ░
+ ░  ░░ ░▒ ▒ ░░  ░  ░  ░    ░         ░    ░   ▒   ░ ░░ ░ ░  ░  ░  
+ ░  ░  ░░ ░           ░              ░  ░     ░  ░░  ░         ░  
+        ░ ░                                                         
+*/
+
 /**
  * @title HYSTEAKS Batch Send Contract
  * @notice This contract allows you to send native and ERC20 tokens to multiple recipients in a single transaction.
