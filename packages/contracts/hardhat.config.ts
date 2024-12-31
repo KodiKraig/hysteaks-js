@@ -31,6 +31,21 @@ const config: HardhatUserConfig = {
       accounts: [PRIVATE_KEY],
     },
   },
+  etherscan: {
+    apiKey: {
+      hychainMainnet: 'NO_API_KEY_NEEDED', // Blockscout doesn't require an API key
+    },
+    customChains: [
+      {
+        network: 'hychainMainnet',
+        chainId: 2911,
+        urls: {
+          apiURL: 'https://hychain.calderaexplorer.xyz/api/v1',
+          browserURL: 'https://explorer.hychain.com',
+        },
+      },
+    ],
+  },
 };
 
 export default config;
