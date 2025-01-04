@@ -8,7 +8,7 @@
 
 ## Packages
 
-- __cli__: HYSTEAKS CLI tool for interacting with deployed contracts from the command line.
-- __contracts__: All the Ethereum EVM Solidity contracts deployed on HYCHAIN.
-- __ethers-sdk__: Auto generated TypeChain ethers.js v6 SDK for interacting with deployed contracts.
-- __reward-helpers__: Helper functions for calculating reward distributions off chain.
+- __@hysteaks-js/cli__: HYSTEAKS CLI tool for interacting with deployed contracts from the command line.
+- __@hysteaks-js/contracts__: All the Ethereum EVM Solidity contracts deployed on HYCHAIN.
+- __@hysteaks-js/ethers-sdk__: Auto generated TypeChain ethers.js v6 SDK for interacting with deployed contracts.
+- __@hysteaks-js/reward-helpers__: Helper functions for calculating reward distributions off chain.
